@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Square Chords</title>
+</head>
+<body>
+    <h2>Square Chords</h2>
+    <div id="chords">
+        <table id="output" class="outer">
+
+        </table>
+        <textarea id="input" rows="5" cols="80"></textarea>
+        <input type="button" id="submit" value="submit">
+    </div>
+    <!--In another world, consider require.js-->
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="squarechord.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $("#submit").on("click", function(e){
+                var input = $("#input").val();
+                //alert(input);
+                var line_delimeter = "\n";
+                var measure_delimeter = " ";
+                var beat_delimeter = "/";
+
+                var lines = input.split(line_delimeter);
+                _.each(lines, function(line){
+                    var $tr = $("<tr></tr>");
+                    var measures = line.split(measure_delimeter);
+
+                    _.each(measures, function(measure){
+                        var $table = $("<td><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
+                        var beats = measure.split(beat_delimeter);
+                        if (beats.length === 1)
+                        {
+                            $tr.append("<td>" + measure + "</td>");
+                        }else if (beats.length === 2){
+                            //Place beats in 1st and 4th td
+                            //TODO: how to do this easier?
+//                            var row1 = $($table.find("tr")[0]);
+//                            var row2 = $($table.find("tr")[1]);
+//                            row1.append("<td>" + beats[0] + "</td>");
+//                            row2.append("<td>" + beats[1] + "</td>");
+                            $($table.find("table td").get(0)).text(beats[0]);
+                            $($table.find("table td").get(3)).text(beats[1]);
+                            $tr.append($table);
+                        }else if (beats.length === 4) {
+                            //Place beats in all tds
+                            _.each(beats, function(beat, i){
+                                $($table.find("table td").get(i)).text(beat);
+                            })
+                            $tr.append($table);
+                        }
+                    });
+
+                    $("#output").append($tr);
+                });
+                var measures = [];
+            })
+        })
+
+    </script>
+
+    <style>
+
+        table.outer > tbody > tr > td {
+          border: 1px solid red;
+          height: 100px;
+          width: 100px;
+          text-transform: uppercase;
+          text-align: center;
+          font-size: 24px;
+        }
+        table.inner {
+            height:100%;
+            width:100%
+        }
+
+    </style>
+</body>
+</html>
