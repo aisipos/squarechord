@@ -7,7 +7,6 @@
     <h2>Square Chords</h2>
     <div id="chords">
         <table id="output" class="outer">
-
         </table>
         <textarea id="input" rows="5" cols="80"></textarea>
         <input type="button" id="submit" value="submit">
@@ -17,8 +16,15 @@
     <script type="text/javascript" src="squarechord.js"></script>
     <script type="text/javascript" src="underscore.js"></script>
     <script type="text/javascript">
+        //Clear the output area
+        function clear()
+        {
+            $("#output").empty();
+        }
+        //Render the text in #input into the table #output
         function render()
         {
+            clear();
             var input = $("#input").val();
             //alert(input);
             var line_delimeter = "\n";
@@ -61,6 +67,8 @@
         var measures = [];
         $(document).ready(function(){
             $("#submit").on("click", render);
+            $("#input").change(render);
+            $("#input").keypress(render);
         })
 
     </script>
