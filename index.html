@@ -17,49 +17,50 @@
     <script type="text/javascript" src="squarechord.js"></script>
     <script type="text/javascript" src="underscore.js"></script>
     <script type="text/javascript">
+        function render()
+        {
+            var input = $("#input").val();
+            //alert(input);
+            var line_delimeter = "\n";
+            var measure_delimeter = " ";
+            var beat_delimeter = "/";
 
-        $(document).ready(function(){
-            $("#submit").on("click", function(e){
-                var input = $("#input").val();
-                //alert(input);
-                var line_delimeter = "\n";
-                var measure_delimeter = " ";
-                var beat_delimeter = "/";
+            var lines = input.split(line_delimeter);
+            _.each(lines, function(line){
+                var $tr = $("<tr></tr>");
+                var measures = line.split(measure_delimeter);
 
-                var lines = input.split(line_delimeter);
-                _.each(lines, function(line){
-                    var $tr = $("<tr></tr>");
-                    var measures = line.split(measure_delimeter);
-
-                    _.each(measures, function(measure){
+                _.each(measures, function(measure){
+                    var beats = measure.split(beat_delimeter);
+                    if (beats.length === 1)
+                    {
+                        $tr.append("<td>" + measure + "</td>");
+                    }else if (beats.length === 2){
+                        //Create 2x2 table
+                        var $table = $("<td class='line'><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
+                        //Place beats in 1st and 4th td
+                        //TODO: how to do this easier?
+                        $($table.find("table td").get(0)).text(beats[0]);
+                        $($table.find("table td").get(3)).text(beats[1]);
+                        $tr.append($table);
+                    }else if (beats.length === 4) {
+                        //Create 2x2 table
                         var $table = $("<td><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
-                        var beats = measure.split(beat_delimeter);
-                        if (beats.length === 1)
-                        {
-                            $tr.append("<td>" + measure + "</td>");
-                        }else if (beats.length === 2){
-                            //Place beats in 1st and 4th td
-                            //TODO: how to do this easier?
-//                            var row1 = $($table.find("tr")[0]);
-//                            var row2 = $($table.find("tr")[1]);
-//                            row1.append("<td>" + beats[0] + "</td>");
-//                            row2.append("<td>" + beats[1] + "</td>");
-                            $($table.find("table td").get(0)).text(beats[0]);
-                            $($table.find("table td").get(3)).text(beats[1]);
-                            $tr.append($table);
-                        }else if (beats.length === 4) {
-                            //Place beats in all tds
-                            _.each(beats, function(beat, i){
-                                $($table.find("table td").get(i)).text(beat);
-                            })
-                            $tr.append($table);
-                        }
-                    });
-
-                    $("#output").append($tr);
+                        //Place beats in all tds
+                        _.each(beats, function(beat, i){
+                            $($table.find("table td").get(i)).text(beat);
+                        })
+                        $tr.append($table);
+                    }
                 });
-                var measures = [];
-            })
+
+                //Add this row to the page
+                $("#output").append($tr);
+            });
+        }
+        var measures = [];
+        $(document).ready(function(){
+            $("#submit").on("click", render);
         })
 
     </script>
@@ -79,6 +80,12 @@
             width:100%
         }
 
+        .line {
+            display:inline-block;
+            position: relative;
+            background:url('line.png');
+            background-size:100% 100%;
+        }
     </style>
 </body>
 </html>
