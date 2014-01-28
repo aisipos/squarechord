@@ -45,9 +45,16 @@
                         //Create 2x2 table
                         var $table = $("<td class='line'><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
                         //Place beats in 1st and 4th td
-                        //TODO: how to do this easier?
                         $($table.find("table td").get(0)).text(beats[0]);
                         $($table.find("table td").get(3)).text(beats[1]);
+                        $tr.append($table);
+                    }else if (beats.length === 3){
+                        //Create 2x2 table
+                        var $table = $("<td><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
+                        //Place beats in 1st and 4th td
+                        $($table.find("table td").get(0)).text(beats[0]);
+                        $($table.find("table td").get(1)).text(beats[1]);
+                        $($table.find("table td").get(2)).text(beats[2]);
                         $tr.append($table);
                     }else if (beats.length === 4) {
                         //Create 2x2 table
