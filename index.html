@@ -21,6 +21,18 @@
         {
             $("#output").empty();
         }
+        //Transform text within a measure
+        //Return with musical elements as proper HTML elements
+        function render_chord(s)
+        {
+            //Flats sharps and naturals (only at end of a "word")
+            var res = s.replace(  /\Bb\b/g,'&#x266d;');
+            //res     = res.replace(/\B#\b/g,'&#x266f;');
+            //res     = res.replace(/\B%\b/g,'&#x266e;');
+            res = res.replace( /%/g,'&#x1d10e;');
+
+            return res;
+        }
         //Render the text in #input into the table #output
         function render()
         {
@@ -38,9 +50,10 @@
 
                 _.each(measures, function(measure){
                     var beats = measure.split(beat_delimeter);
+                    beats = _.map(beats, render_chord);
                     if (beats.length === 1)
                     {
-                        $tr.append("<td>" + measure + "</td>");
+                        $tr.append("<td>" + beats[0] + "</td>");
                     }else if (beats.length === 2){
                         //Create 2x2 table
                         var $table = $("<td class='line'><table class='inner'> <tr> <td></td> <td></td> </tr> <tr> <td></td> <td></td> </tr> </table></td>");
