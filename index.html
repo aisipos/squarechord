@@ -15,6 +15,7 @@
     <script type="text/javascript" src="jquery-1.9.1.js"></script>
     <script type="text/javascript" src="squarechord.js"></script>
     <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="jspdf.min.js"></script>
     <script type="text/javascript">
         //Clear the output area
         function clear()
@@ -83,6 +84,24 @@
                 //Add this row to the page
                 $("#output").append($tr);
             });
+        }
+        function render_pdf(){
+            var doc = new jsPDF();
+            var elementHandler = {
+              '#ignorePDF': function (element, renderer) {
+                return true;
+              }
+            };
+            var source = $("#output")[0];
+            doc.fromHTML(
+                source,
+                15,
+                15,
+                {
+                  'width': 180,'elementHandlers': elementHandler
+                });
+
+            doc.output("dataurlnewwindow");
         }
         var measures = [];
         $(document).ready(function(){
